@@ -1,0 +1,62 @@
+int smoke = 0;
+
+// Import Liquid Crytsal Library
+#include<LiquidCrystal.h>
+// Create Instance, Pass Pin Numbers as: RS,E,D4,D5,D6,D7
+LiquidCrystal lcd(13,12,11,10,9,8);
+
+void setup()
+{
+  pinMode(A5, INPUT);
+  pinMode(7,OUTPUT);
+  pinMode(6,OUTPUT);
+  pinMode(5,OUTPUT);
+  Serial.begin(9600);
+  
+  // Serial.begin(9600);
+  // Use begin function to activate LCD
+  // Arguments: Columns, Rows of LCD
+  lcd.begin(16, 2);
+}
+
+void loop()
+{
+  smoke = analogRead(A5);
+  Serial.println(smoke);
+  delay(10);
+  if(smoke >=55)
+  {
+    digitalWrite(6,HIGH);
+    digitalWrite(7,LOW);
+    digitalWrite(5,HIGH);
+    {
+      lcd.begin(16, 2);
+      lcd.print("   <------ EMERGENCY EXIT   ");
+      lcd.setCursor(0,1);
+      lcd.print("              DIAL 101           ");
+      delay(200);
+    }
+    for( int PositionCount = 0; PositionCount < 16; PositionCount++ )
+    {
+      lcd.scrollDisplayLeft();
+      delay(100);
+    }
+  }
+  else
+  {
+    digitalWrite(6,LOW);
+    digitalWrite(7,HIGH);
+    digitalWrite(5,LOW);
+    {
+      lcd.begin(16, 2);
+      lcd.print("   WELCOME TO HOTEL ABC   ");
+      lcd.setCursor(0,1);
+      lcd.print("    HAVE A GREAT STAY   ");
+    }
+    for( int PositionCount = 0; PositionCount < 16; PositionCount++ )
+    {
+      lcd.scrollDisplayLeft();
+      delay(100);
+    }
+  }
+}
